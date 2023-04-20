@@ -85,3 +85,68 @@ func (m *MahasiswaController) ReadById(c *gin.Context) {
 		"data":    mahasiswa,
 	})
 }
+
+func (m *MahasiswaController) Update(c *gin.Context) {
+	id := c.Param("id")
+
+	var mahasiswa models.Mahasiswa
+
+	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
+	row := m.DB.QueryRow(querySearch)
+	if row == nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Mahasiswa tidak ditemukan",
+		})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	queryUpdate := "UPDATE mahasiswa SET nama=?, usia=?, gender=? WHERE id=?"
+	_, err := m.DB.Exec(queryUpdate, mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "berhasil diupdate",
+	})
+}
+
+func (m *MahasiswaController) Delete(c *gin.Context) {
+	id := c.Param("id")
+	var mahasiswa models.Mahasiswa
+
+	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
+	row := m.DB.QueryRow(querySearch)
+	if row == nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Mahasiswa tidak ditemukan",
+		})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	queryDelete := "DELETE FROM mahasiswa WHERE id=?"
+	_, err := m.DB.Exec(queryDelete, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "berhasil dihapus",
+	})
+}
