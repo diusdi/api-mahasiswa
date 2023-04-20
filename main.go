@@ -2,17 +2,20 @@ package main
 
 import (
 	"api-mahasiswa/config"
+	"api-mahasiswa/routers"
+	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	db := config.ConnectDb()
-	insert, err := db.Query("INSERT INTO user VALUES ( 'TEST' )")
-
-	defer db.Close()
+	router := gin.Default()
+	db, err := config.ConnectDb()
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err)
 	}
-	defer insert.Close()
+	mahasiswaRoute := routers.NewMahasiswaRoute(router.Group("/mhs"), db)
+	mahasiswaRoute.SetupRoutes()
+
+	router.Run(":8080")
 }
