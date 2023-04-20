@@ -14,6 +14,7 @@ type MahasiswaRoute struct {
 
 func (tr *MahasiswaRoute) SetupRoutes() {
 	tr.Router.POST("/", tr.MahasiswaController.Create)
+	tr.Router.GET("/", tr.MahasiswaController.Read)
 }
 
 func NewMahasiswaRoute(router *gin.RouterGroup, db *sql.DB) *MahasiswaRoute {
