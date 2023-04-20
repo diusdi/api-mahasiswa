@@ -3,6 +3,7 @@ package controllers
 import (
 	"api-mahasiswa/models"
 	"database/sql"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -47,6 +48,7 @@ func (m *MahasiswaController) Read(c *gin.Context) {
 	daftarMahasiswa := []models.Mahasiswa{}
 	for rows.Next() {
 		var mahasiswa models.Mahasiswa
+		fmt.Printf("rows: %v\n", rows)
 		err := rows.Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -57,6 +59,29 @@ func (m *MahasiswaController) Read(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "berhasil",
-		"data":    daftarMahasiswa,
+		"data":    daftarMahasiswa[0].Nama,
+		"rows":    rows,
+	})
+}
+
+func (m *MahasiswaController) ReadById(c *gin.Context) {
+	id := c.Param("id")
+
+	var mahasiswa models.Mahasiswa
+
+	query := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
+	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "berhasil",
+		"data":    mahasiswa,
 	})
 }
