@@ -59,8 +59,7 @@ func (m *MahasiswaController) Read(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "berhasil",
-		"data":    daftarMahasiswa[0].Nama,
-		"rows":    rows,
+		"data":    daftarMahasiswa,
 	})
 }
 
@@ -72,11 +71,7 @@ func (m *MahasiswaController) ReadById(c *gin.Context) {
 	query := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
 	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
 		return
 	}
 
@@ -121,28 +116,27 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 
 func (m *MahasiswaController) Delete(c *gin.Context) {
 	id := c.Param("id")
-	var mahasiswa models.Mahasiswa
-
 	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
-	row := m.DB.QueryRow(querySearch)
-	if row == nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Mahasiswa tidak ditemukan",
-		})
-		return
-	}
+	err := m.DB.QueryRow(querySearch)
 
-	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	queryDelete := "DELETE FROM mahasiswa WHERE id=?"
-	_, err := m.DB.Exec(queryDelete, id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Data mahasiswa tidak ditemukan",
+		})
+		return
+	}
+
+	query, errors := m.DB.Prepare("DELETE FROM mahasiswa WHERE id=?")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": errors.Error(),
+		})
+		return
+	}
+
+	_, errExt := query.Exec(id)
+	if errExt != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errExt.Error()})
 		return
 	}
 
