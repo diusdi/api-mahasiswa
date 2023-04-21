@@ -1,0 +1,16 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API untuk mengatur data mahasiswa Jobhun. Untuk source code dapat dilihat di https://github.com/diusdi/api-mahasiswa",
+        "title": "API Mahasiswa",
+        "contact": {},
+        "license": {
+            "name": "Licensi MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {}
+}

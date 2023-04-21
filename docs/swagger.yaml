@@ -1,0 +1,13 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: API untuk mengatur data mahasiswa Jobhun. Untuk source code dapat dilihat
+    di https://github.com/diusdi/api-mahasiswa
+  license:
+    name: Licensi MIT
+    url: https://opensource.org/licenses/MIT
+  title: API Mahasiswa
+  version: "1.0"
+paths: {}
+swagger: "2.0"
