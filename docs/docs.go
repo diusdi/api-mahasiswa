@@ -21,6 +21,25 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/mhs": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "menampilkan semua data mahasiswa",
+                "operationId": "read-mahasiswa",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            },
             "post": {
                 "produces": [
                     "application/json"
@@ -62,7 +81,8 @@ const docTemplate = `{
                     "example": "1"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "nama": {
                     "type": "string",

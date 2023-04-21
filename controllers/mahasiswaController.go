@@ -44,6 +44,12 @@ func (m *MahasiswaController) Create(c *gin.Context) {
 	})
 }
 
+// @Summary menampilkan semua data mahasiswa
+// @ID read-mahasiswa
+// @Produce json
+// @Success 200 {string} message
+// @Failure 400 {object} error
+// @Router /mhs [get]
 func (m *MahasiswaController) Read(c *gin.Context) {
 	rows, err := m.DB.Query("SELECT * FROM mahasiswa")
 	if err != nil {
