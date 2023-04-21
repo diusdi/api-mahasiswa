@@ -70,6 +70,36 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/mhs/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "menampilkan data mahasiswa berdasarkan id",
+                "operationId": "read-mahasiswa-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id mahasiswa",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
         }
     },
     "definitions": {

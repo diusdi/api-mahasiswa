@@ -63,4 +63,24 @@ paths:
           description: Bad Request
           schema: {}
       summary: menambahkan data mahasiswa baru
+  /mhs/{id}:
+    get:
+      operationId: read-mahasiswa-by-id
+      parameters:
+      - description: Id mahasiswa
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: menampilkan data mahasiswa berdasarkan id
 swagger: "2.0"

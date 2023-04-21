@@ -76,6 +76,13 @@ func (m *MahasiswaController) Read(c *gin.Context) {
 	})
 }
 
+// @Summary menampilkan data mahasiswa berdasarkan id
+// @ID read-mahasiswa-by-id
+// @Produce json
+// @Param id path int true "Id mahasiswa"
+// @Success 200 {string} message
+// @Failure 400 {object} error
+// @Router /mhs/{id} [get]
 func (m *MahasiswaController) ReadById(c *gin.Context) {
 	id := c.Param("id")
 
