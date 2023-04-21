@@ -1,4 +1,22 @@
 basePath: /
+definitions:
+  models.Mahasiswa:
+    properties:
+      gender:
+        example: "1"
+        type: string
+      id:
+        type: integer
+      nama:
+        example: Dion
+        type: string
+      tanggal_registrasi:
+        example: "2020-01-02T15:04:05Z"
+        type: string
+      usia:
+        example: 21
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -9,5 +27,26 @@ info:
     url: https://opensource.org/licenses/MIT
   title: API Mahasiswa
   version: "1.0"
-paths: {}
+paths:
+  /mhs:
+    post:
+      operationId: create-mahasiswa
+      parameters:
+      - description: Menambahkan data mahasiswa
+        in: body
+        name: mahasiswa
+        required: true
+        schema:
+          $ref: '#/definitions/models.Mahasiswa'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: menambahkan data mahasiswa baru
 swagger: "2.0"

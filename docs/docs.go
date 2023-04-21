@@ -19,7 +19,66 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/mhs": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "menambahkan data mahasiswa baru",
+                "operationId": "create-mahasiswa",
+                "parameters": [
+                    {
+                        "description": "Menambahkan data mahasiswa",
+                        "name": "mahasiswa",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Mahasiswa"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Mahasiswa": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nama": {
+                    "type": "string",
+                    "example": "Dion"
+                },
+                "tanggal_registrasi": {
+                    "type": "string",
+                    "example": "2020-01-02T15:04:05Z"
+                },
+                "usia": {
+                    "type": "integer",
+                    "example": 21
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

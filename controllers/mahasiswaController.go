@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
-	"time"
+
+	_ "api-mahasiswa/docs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,13 @@ type MahasiswaController struct {
 	DB *sql.DB
 }
 
+// @Summary menambahkan data mahasiswa baru
+// @ID create-mahasiswa
+// @Param mahasiswa body models.Mahasiswa true "Menambahkan data mahasiswa"
+// @Produce json
+// @Success 200 {string} message
+// @Failure 400 {object} error
+// @Router /mhs [post]
 func (m *MahasiswaController) Create(c *gin.Context) {
 	var mahasiswa models.Mahasiswa
 
@@ -24,16 +32,15 @@ func (m *MahasiswaController) Create(c *gin.Context) {
 		})
 		return
 	}
-	tanggalRegistrasi := time.DateTime
 
-	_, err = m.DB.Exec("INSERT INTO mahasiswa (nama, usia, gender, tanggal_registrasi) VALUES (?, ?, ?, ?)", mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, tanggalRegistrasi)
+	_, err = m.DB.Exec("INSERT INTO mahasiswa (nama, usia, gender, tanggal_registrasi) VALUES (?, ?, ?, ?)", mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, mahasiswa.TanggalRegistrasi)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "berhasil",
+		"message": "Berhasil menambahkan data mahasiswa",
 	})
 }
 
