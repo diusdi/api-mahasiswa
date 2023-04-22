@@ -62,7 +62,7 @@ func (m *MahasiswaController) Read(c *gin.Context) {
 	for rows.Next() {
 		var mahasiswa models.Mahasiswa
 		fmt.Printf("rows: %v\n", rows)
-		err := rows.Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
+		err := rows.Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.IsActive, &mahasiswa.TanggalRegistrasi)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -101,6 +101,14 @@ func (m *MahasiswaController) ReadById(c *gin.Context) {
 	})
 }
 
+// @Summary update data mahasiswa
+// @ID update-mahasiswa
+// @Produce json
+// @Param id path int true "Id mahasiswa"
+// @Param mahasiswa body models.Mahasiswa true "Mengupdate data mahasiswa"
+// @Success 200 {string} message
+// @Failure 400 {object} error
+// @Router /mhs/{id} [put]
 func (m *MahasiswaController) Update(c *gin.Context) {
 	id := c.Param("id")
 
@@ -134,31 +142,31 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 	})
 }
 
+// @Summary menghapus data mahasiswa
+// @ID delete-mahasiswa
+// @Produce json
+// @Param id path int true "Id mahasiswa"
+// @Success 200 {string} message
+// @Failure 400 {object} error
+// @Router /mhs/{id} [delete]
 func (m *MahasiswaController) Delete(c *gin.Context) {
 	id := c.Param("id")
-	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
-	err := m.DB.QueryRow(querySearch)
 
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Data mahasiswa tidak ditemukan",
-		})
-		return
-	}
-
-	query, errors := m.DB.Prepare("DELETE FROM mahasiswa WHERE id=?")
+	query, err := m.DB.Prepare("DELETE FROM mahasiswa WHERE id=?")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": errors.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
 
-	_, errExt := query.Exec(id)
-	if errExt != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": errExt.Error()})
-		return
-	}
+	query.Exec(id)
+	// if errExt != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "berhasil dihapus",

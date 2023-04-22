@@ -8,6 +8,9 @@ definitions:
       id:
         example: 1
         type: integer
+      is_active:
+        example: "1"
+        type: string
       nama:
         example: Dion
         type: string
@@ -64,6 +67,25 @@ paths:
           schema: {}
       summary: menambahkan data mahasiswa baru
   /mhs/{id}:
+    delete:
+      operationId: delete-mahasiswa
+      parameters:
+      - description: Id mahasiswa
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: menghapus data mahasiswa
     get:
       operationId: read-mahasiswa-by-id
       parameters:
@@ -83,4 +105,29 @@ paths:
           description: Bad Request
           schema: {}
       summary: menampilkan data mahasiswa berdasarkan id
+    put:
+      operationId: update-mahasiswa
+      parameters:
+      - description: Id mahasiswa
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Mengupdate data mahasiswa
+        in: body
+        name: mahasiswa
+        required: true
+        schema:
+          $ref: '#/definitions/models.Mahasiswa'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: update data mahasiswa
 swagger: "2.0"
