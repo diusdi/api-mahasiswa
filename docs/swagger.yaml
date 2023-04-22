@@ -113,7 +113,8 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Mengupdate data mahasiswa
+      - description: 'Data yang bisa diupdate : nama, umur, gender (''0'' untuk perempuan
+          dan ''1'' untuk laki-laki)'
         in: body
         name: mahasiswa
         required: true

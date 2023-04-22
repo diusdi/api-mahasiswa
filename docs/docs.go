@@ -115,7 +115,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Mengupdate data mahasiswa",
+                        "description": "Data yang bisa diupdate : nama, umur, gender ('0' untuk perempuan dan '1' untuk laki-laki)",
                         "name": "mahasiswa",
                         "in": "body",
                         "required": true,

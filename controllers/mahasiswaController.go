@@ -124,7 +124,7 @@ func (m *MahasiswaController) ReadById(c *gin.Context) {
 // @ID update-mahasiswa
 // @Produce json
 // @Param id path int true "Id mahasiswa"
-// @Param mahasiswa body models.Mahasiswa true "Mengupdate data mahasiswa"
+// @Param mahasiswa body models.Mahasiswa true "Data yang bisa diupdate : nama, umur, gender ('0' untuk perempuan dan '1' untuk laki-laki)"
 // @Success 200 {string} message
 // @Failure 400 {object} error
 // @Router /mhs/{id} [put]
