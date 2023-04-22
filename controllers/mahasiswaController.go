@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	_ "api-mahasiswa/docs"
 
@@ -17,7 +18,7 @@ type MahasiswaController struct {
 
 // @Summary menambahkan data mahasiswa baru
 // @ID create-mahasiswa
-// @Param mahasiswa body models.Mahasiswa true "Menambahkan data mahasiswa"
+// @Param mahasiswa body models.Mahasiswa true "Data yang bisa ditambahkan : nama, usia, gender ('0' untuk perempuan dan '1' untuk laki-laki)"
 // @Produce json
 // @Success 200 {string} message
 // @Failure 400 {object} error
@@ -33,7 +34,8 @@ func (m *MahasiswaController) Create(c *gin.Context) {
 		return
 	}
 
-	_, err = m.DB.Exec("INSERT INTO mahasiswa (nama, usia, gender, tanggal_registrasi) VALUES (?, ?, ?, ?)", mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, mahasiswa.TanggalRegistrasi)
+	tanggalRegistrasi := time.Now().Format("2006-01-02 15:04:05")
+	_, err = m.DB.Exec("INSERT INTO mahasiswa (nama, usia, gender, tanggal_registrasi) VALUES (?, ?, ?, ?)", mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, tanggalRegistrasi)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
