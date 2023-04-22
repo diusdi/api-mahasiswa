@@ -135,12 +135,10 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 
 	var mahasiswa models.Mahasiswa
 
-	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
-	row := m.DB.QueryRow(querySearch)
-	if row == nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Mahasiswa tidak ditemukan",
-		})
+	query := fmt.Sprintf("SELECT nama, usia, gender, tanggal_registrasi FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
+	err := m.DB.QueryRow(query).Scan(&mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
 		return
 	}
 
@@ -152,8 +150,8 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 	}
 
 	queryUpdate := "UPDATE mahasiswa SET nama=?, usia=?, gender=? WHERE id=?"
-	_, err := m.DB.Exec(queryUpdate, mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, id)
-	if err != nil {
+	_, errUpdate := m.DB.Exec(queryUpdate, mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, id)
+	if errUpdate != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -173,23 +171,32 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 func (m *MahasiswaController) Delete(c *gin.Context) {
 	id := c.Param("id")
 
-	query, err := m.DB.Prepare("DELETE FROM mahasiswa WHERE id=?")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+	var mahasiswa models.Mahasiswa
+
+	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
+	row := m.DB.QueryRow(querySearch)
+	if row == nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Mahasiswa tidak ditemukan",
+		})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	query.Exec(id)
-	// if errExt != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{
-	// 		"error": err.Error(),
-	// 	})
-	// 	return
-	// }
+	queryUpdate := "UPDATE mahasiswa SET is_active=? WHERE id=?"
+	_, err := m.DB.Exec(queryUpdate, "0", id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "berhasil dihapus",
+		"message": "Data mahasiswa berhasil dihapus",
 	})
 }
