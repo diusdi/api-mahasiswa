@@ -88,16 +88,35 @@ func (m *MahasiswaController) ReadById(c *gin.Context) {
 
 	var mahasiswa models.Mahasiswa
 
-	query := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
-	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
+	query := fmt.Sprintf("SELECT nama, usia, gender, tanggal_registrasi FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
+	err := m.DB.QueryRow(query).Scan(&mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
 		return
 	}
 
+	var gender map[string]string
+	if mahasiswa.Gender == "1" {
+		gender = map[string]string{
+			"1": "laki-laki",
+		}
+	} else {
+		gender = map[string]string{
+			"0": "perempuan",
+		}
+	}
+
+	tanggalRegistrasi := mahasiswa.TanggalRegistrasi.Format("02-01-2006")
+	data := map[string]any{
+		"nama":               mahasiswa.Nama,
+		"usia":               mahasiswa.Usia,
+		"gender":             gender,
+		"tanggal_registrasi": tanggalRegistrasi,
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "berhasil",
-		"data":    mahasiswa,
+		"message": "berhasil menampilkan data",
+		"data":    data,
 	})
 }
 
