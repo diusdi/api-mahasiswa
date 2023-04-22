@@ -135,8 +135,8 @@ func (m *MahasiswaController) Update(c *gin.Context) {
 
 	var mahasiswa models.Mahasiswa
 
-	query := fmt.Sprintf("SELECT nama, usia, gender, tanggal_registrasi FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
-	err := m.DB.QueryRow(query).Scan(&mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
+	query := fmt.Sprintf("SELECT id FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
+	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
 		return
