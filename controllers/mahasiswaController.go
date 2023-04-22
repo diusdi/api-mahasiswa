@@ -173,25 +173,17 @@ func (m *MahasiswaController) Delete(c *gin.Context) {
 
 	var mahasiswa models.Mahasiswa
 
-	querySearch := fmt.Sprintf("SELECT * FROM mahasiswa WHERE id = %s", id)
-	row := m.DB.QueryRow(querySearch)
-	if row == nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Mahasiswa tidak ditemukan",
-		})
-		return
-	}
-
-	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	queryUpdate := "UPDATE mahasiswa SET is_active=? WHERE id=?"
-	_, err := m.DB.Exec(queryUpdate, "0", id)
+	query := fmt.Sprintf("SELECT id FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
+	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id)
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+		return
+	}
+
+	// fitur soft delete
+	queryDelete := "UPDATE mahasiswa SET is_active=? WHERE id=?"
+	_, errDelete := m.DB.Exec(queryDelete, "0", id)
+	if errDelete != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
