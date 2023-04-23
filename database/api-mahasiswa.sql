@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 21, 2023 at 07:24 AM
+-- Generation Time: Apr 23, 2023 at 05:10 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -77,6 +77,7 @@ CREATE TABLE `mahasiswa` (
   `nama` varchar(100) NOT NULL,
   `usia` int(2) UNSIGNED NOT NULL,
   `gender` enum('0','1') NOT NULL,
+  `is_active` enum('0','1') DEFAULT '1',
   `tanggal_registrasi` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -84,12 +85,12 @@ CREATE TABLE `mahasiswa` (
 -- Dumping data for table `mahasiswa`
 --
 
-INSERT INTO `mahasiswa` (`id`, `nama`, `usia`, `gender`, `tanggal_registrasi`) VALUES
-(1, 'Dionysius Yudha Riadi', 20, '1', '2020-01-02 15:04:05'),
-(2, 'Budi Alexander', 21, '1', '2020-01-02 15:04:05'),
-(3, 'Himuro Sakura', 19, '0', '2023-04-21 07:17:50'),
-(4, 'Hinata Himawari', 19, '0', '2023-04-21 07:18:10'),
-(5, 'Tenten Uzumaki', 20, '0', '2023-04-21 07:18:10');
+INSERT INTO `mahasiswa` (`id`, `nama`, `usia`, `gender`, `is_active`, `tanggal_registrasi`) VALUES
+(1, 'Dion', 21, '1', '1', '2020-01-02 15:04:05'),
+(2, 'Budi Alexander', 21, '1', '1', '2020-01-02 15:04:05'),
+(3, 'Himuro Sakura', 19, '0', '1', '2023-04-21 07:17:50'),
+(4, 'Hinata Himawari', 19, '0', '1', '2023-04-21 07:18:10'),
+(5, 'Budi Uciha', 21, '1', '1', '2023-04-22 15:20:34');
 
 -- --------------------------------------------------------
 
@@ -161,7 +162,7 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT for table `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `mahasiswa_hobi`
