@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  models.Hobi:
+    properties:
+      id:
+        example: 1
+        type: integer
+      nama_hobi:
+        example: berenang
+        type: string
+    type: object
   models.Mahasiswa:
     properties:
       gender:
@@ -49,7 +58,8 @@ paths:
     post:
       operationId: create-mahasiswa
       parameters:
-      - description: Menambahkan data mahasiswa
+      - description: 'Data yang bisa ditambahkan : nama, usia, gender (''0'' untuk
+          perempuan dan ''1'' untuk laki-laki)'
         in: body
         name: mahasiswa
         required: true
@@ -113,7 +123,7 @@ paths:
         name: id
         required: true
         type: integer
-      - description: 'Data yang bisa diupdate : nama, umur, gender (''0'' untuk perempuan
+      - description: 'Data yang bisa diupdate : nama, usia, gender (''0'' untuk perempuan
           dan ''1'' untuk laki-laki)'
         in: body
         name: mahasiswa
@@ -131,4 +141,42 @@ paths:
           description: Bad Request
           schema: {}
       summary: update data mahasiswa
+  /mhs/hobi:
+    get:
+      operationId: read-hobi
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: menampilkan semua data hobi
+      tags:
+      - Mengelola data hobi
+    post:
+      operationId: create-hobi
+      parameters:
+      - description: 'Data yang bisa ditambahkan : nama hobi'
+        in: body
+        name: hobi
+        required: true
+        schema:
+          $ref: '#/definitions/models.Hobi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: menambahkan data hobi baru
+      tags:
+      - Mengelola data hobi
 swagger: "2.0"

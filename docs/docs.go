@@ -48,12 +48,69 @@ const docTemplate = `{
                 "operationId": "create-mahasiswa",
                 "parameters": [
                     {
-                        "description": "Menambahkan data mahasiswa",
+                        "description": "Data yang bisa ditambahkan : nama, usia, gender ('0' untuk perempuan dan '1' untuk laki-laki)",
                         "name": "mahasiswa",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.Mahasiswa"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/mhs/hobi": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mengelola data hobi"
+                ],
+                "summary": "menampilkan semua data hobi",
+                "operationId": "read-hobi",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mengelola data hobi"
+                ],
+                "summary": "menambahkan data hobi baru",
+                "operationId": "create-hobi",
+                "parameters": [
+                    {
+                        "description": "Data yang bisa ditambahkan : nama hobi",
+                        "name": "hobi",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Hobi"
                         }
                     }
                 ],
@@ -115,7 +172,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Data yang bisa diupdate : nama, umur, gender ('0' untuk perempuan dan '1' untuk laki-laki)",
+                        "description": "Data yang bisa diupdate : nama, usia, gender ('0' untuk perempuan dan '1' untuk laki-laki)",
                         "name": "mahasiswa",
                         "in": "body",
                         "required": true,
@@ -168,6 +225,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.Hobi": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nama_hobi": {
+                    "type": "string",
+                    "example": "berenang"
+                }
+            }
+        },
         "models.Mahasiswa": {
             "type": "object",
             "properties": {

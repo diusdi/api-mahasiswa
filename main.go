@@ -30,7 +30,9 @@ func main() {
 		log.Fatal(err)
 	}
 	mahasiswaRoute := routers.NewMahasiswaRoute(router.Group("/mhs"), db)
+	hobiRoute := routers.NewHobiRoute(router.Group("/mhs/hobi"), db)
 	mahasiswaRoute.SetupRoutes()
+	hobiRoute.SetupRoutes()
 
 	// route dokumentasi
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
