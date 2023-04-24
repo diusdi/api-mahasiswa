@@ -121,6 +121,48 @@
                 }
             }
         },
+        "/mhs/hobi/{id}": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mengelola data hobi"
+                ],
+                "summary": "update data hobi",
+                "operationId": "update-hobi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id hobi",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data yang bisa diupdate : nama hobi",
+                        "name": "mahasiswa",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Hobi"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/mhs/{id}": {
             "get": {
                 "produces": [

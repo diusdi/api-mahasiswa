@@ -15,7 +15,6 @@ type HobiRoute struct {
 func (tr *HobiRoute) SetupRoutes() {
 	tr.Router.POST("/", tr.HobiController.Create)
 	tr.Router.GET("/", tr.HobiController.Read)
-	tr.Router.GET("/:id", tr.HobiController.ReadById)
 	tr.Router.PUT("/:id", tr.HobiController.Update)
 	tr.Router.DELETE("/:id", tr.HobiController.Delete)
 }

@@ -87,86 +87,43 @@ func (m *HobiController) Read(c *gin.Context) {
 	})
 }
 
-// @Summary menampilkan data mahasiswa berdasarkan id
-// @ID read-mahasiswa-by-id
+// @Tags Mengelola data hobi
+// @Summary update data hobi
+// @ID update-hobi
 // @Produce json
-// @Param id path int true "Id mahasiswa"
+// @Param id path int true "Id hobi"
+// @Param mahasiswa body models.Hobi true "Data yang bisa diupdate : nama hobi"
 // @Success 200 {string} message
 // @Failure 400 {object} error
-// @Router /mhs/{id} [get]
-func (m *HobiController) ReadById(c *gin.Context) {
-	id := c.Param("id")
-
-	var mahasiswa models.Mahasiswa
-
-	query := fmt.Sprintf("SELECT nama, usia, gender, tanggal_registrasi FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
-	err := m.DB.QueryRow(query).Scan(&mahasiswa.Nama, &mahasiswa.Usia, &mahasiswa.Gender, &mahasiswa.TanggalRegistrasi)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
-		return
-	}
-
-	var gender map[string]string
-	if mahasiswa.Gender == "1" {
-		gender = map[string]string{
-			"1": "laki-laki",
-		}
-	} else {
-		gender = map[string]string{
-			"0": "perempuan",
-		}
-	}
-
-	tanggalRegistrasi := mahasiswa.TanggalRegistrasi.Format("02-01-2006")
-	data := map[string]any{
-		"nama":               mahasiswa.Nama,
-		"usia":               mahasiswa.Usia,
-		"gender":             gender,
-		"tanggal_registrasi": tanggalRegistrasi,
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "berhasil menampilkan data",
-		"data":    data,
-	})
-}
-
-// @Summary update data mahasiswa
-// @ID update-mahasiswa
-// @Produce json
-// @Param id path int true "Id mahasiswa"
-// @Param mahasiswa body models.Mahasiswa true "Data yang bisa diupdate : nama, usia, gender ('0' untuk perempuan dan '1' untuk laki-laki)"
-// @Success 200 {string} message
-// @Failure 400 {object} error
-// @Router /mhs/{id} [put]
+// @Router /mhs/hobi/{id} [put]
 func (m *HobiController) Update(c *gin.Context) {
 	id := c.Param("id")
 
-	var mahasiswa models.Mahasiswa
+	var hobi models.Hobi
 
-	query := fmt.Sprintf("SELECT id FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
-	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id)
+	query := fmt.Sprintf("SELECT id FROM hobi WHERE id = %s", id)
+	err := m.DB.QueryRow(query).Scan(&hobi.Id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Data hobi tidak ditemukan"})
 		return
 	}
 
-	if err := c.ShouldBindJSON(&mahasiswa); err != nil {
+	if err := c.ShouldBindJSON(&hobi); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	queryUpdate := "UPDATE mahasiswa SET nama=?, usia=?, gender=? WHERE id=?"
-	_, errUpdate := m.DB.Exec(queryUpdate, mahasiswa.Nama, mahasiswa.Usia, mahasiswa.Gender, id)
+	queryUpdate := "UPDATE hobi SET nama_hobi=? WHERE id=?"
+	_, errUpdate := m.DB.Exec(queryUpdate, hobi.NamaHobi, id)
 	if errUpdate != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Data mahasiswa berhasil diupdate",
+		"message": "Data hobi berhasil diupdate",
 	})
 }
 
