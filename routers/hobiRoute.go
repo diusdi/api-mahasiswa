@@ -16,7 +16,6 @@ func (tr *HobiRoute) SetupRoutes() {
 	tr.Router.POST("/", tr.HobiController.Create)
 	tr.Router.GET("/", tr.HobiController.Read)
 	tr.Router.PUT("/:id", tr.HobiController.Update)
-	tr.Router.DELETE("/:id", tr.HobiController.Delete)
 }
 
 func NewHobiRoute(router *gin.RouterGroup, db *sql.DB) *HobiRoute {

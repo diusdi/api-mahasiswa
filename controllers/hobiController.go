@@ -126,35 +126,3 @@ func (m *HobiController) Update(c *gin.Context) {
 		"message": "Data hobi berhasil diupdate",
 	})
 }
-
-// @Summary menghapus data mahasiswa
-// @ID delete-mahasiswa
-// @Produce json
-// @Param id path int true "Id mahasiswa"
-// @Success 200 {string} message
-// @Failure 400 {object} error
-// @Router /mhs/{id} [delete]
-func (m *HobiController) Delete(c *gin.Context) {
-	id := c.Param("id")
-
-	var mahasiswa models.Mahasiswa
-
-	query := fmt.Sprintf("SELECT id FROM mahasiswa WHERE id = %s AND is_active = '1'", id)
-	err := m.DB.QueryRow(query).Scan(&mahasiswa.Id)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
-		return
-	}
-
-	// fitur soft delete
-	queryDelete := "UPDATE mahasiswa SET is_active=? WHERE id=?"
-	_, errDelete := m.DB.Exec(queryDelete, "0", id)
-	if errDelete != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Data mahasiswa berhasil dihapus",
-	})
-}
